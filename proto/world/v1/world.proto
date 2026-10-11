@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package xenomit.world.v1;
+
+option go_package = "github.com/xenomit/server/gen/proto/world/v1;worldv1";
+
+// WorldService manages map presence, movement, and world broadcasts.
+service WorldService {
+  rpc JoinMap(JoinMapRequest) returns (JoinMapResponse);
+  rpc LeaveMap(LeaveMapRequest) returns (LeaveMapResponse);
+  rpc Transfer(TransferRequest) returns (TransferResponse);
+  rpc Broadcast(BroadcastRequest) returns (BroadcastResponse);
+  rpc SetRadiation(SetRadiationRequest) returns (SetRadiationResponse);
+  rpc ListOnline(ListOnlineRequest) returns (ListOnlineResponse);
+}
+
+message PlayerSnapshot {
+  string user_id = 1;
+  string session_id = 2;
+  string pilot_name = 3;
+  uint32 ship_id = 4;
+  uint32 faction_id = 5;
+  uint32 map_id = 6;
+  float x = 7;
+  float y = 8;
+  int64 credits = 9;
+  int64 uridium = 10;
+  int64 honor = 11;
+  int64 experience = 12;
+  bool banned = 13;
+}
+
+message Presence {
+  string user_id = 1;
+  bool online = 2;
+  uint32 map_id = 3;
+  string session_id = 4;
+  float x = 5;
+  float y = 6;
+}
+
+message JoinMapRequest {
+  string user_id = 1;
+  string session_id = 2;
+  uint32 map_id = 3;
+  float x = 4;
+  float y = 5;
+  PlayerSnapshot player = 6;
+}
+
+message JoinMapResponse {
+  bool ok = 1;
+}
+
+message LeaveMapRequest {
+  string user_id = 1;
+  string session_id = 2;
+  uint32 map_id = 3;
+}
+
+message LeaveMapResponse {
+  bool ok = 1;
+}
+
+message TransferRequest {
+  string user_id = 1;
+  string session_id = 2;
+  uint32 from_map = 3;
+  uint32 to_map = 4;
+  float x = 5;
+  float y = 6;
+}
+
+message TransferResponse {
+  bool ok = 1;
+}
+
+message BroadcastRequest {
+  uint32 map_id = 1;
+  bytes payload = 2;
+  string channel = 3;
+}
+
+message BroadcastResponse {
+  uint32 recipients = 1;
+}
+
+message SetRadiationRequest {
+  uint32 map_id = 1;
+  bool enabled = 2;
+  float level = 3;
+}
+
+message SetRadiationResponse {
+  bool ok = 1;
+}
+
+message ListOnlineRequest {
+  uint32 map_id = 1;
+}
+
+message ListOnlineResponse {
+  repeated Presence players = 1;
+}

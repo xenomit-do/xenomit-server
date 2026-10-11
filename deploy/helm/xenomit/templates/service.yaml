@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - name: game
+      port: {{ .Values.service.ports.game }}
+      targetPort: game
+      protocol: TCP
+    - name: chat
+      port: {{ .Values.service.ports.chat }}
+      targetPort: chat
+      protocol: TCP
+    - name: policy
+      port: {{ .Values.service.ports.policy }}
+      targetPort: policy
+      protocol: TCP
+    - name: http
+      port: {{ .Values.service.ports.http }}
+      targetPort: http
+      protocol: TCP

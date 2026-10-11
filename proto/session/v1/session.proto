@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package xenomit.session.v1;
+
+option go_package = "github.com/xenomit/server/gen/proto/session/v1;sessionv1";
+
+// SessionService issues and validates player sessions.
+service SessionService {
+  // Maps user_id to a new session_id.
+  rpc IssueSession(IssueSessionRequest) returns (IssueSessionResponse);
+  // Validates user_id + session_id and returns the current player snapshot.
+  rpc ValidateSession(ValidateSessionRequest) returns (ValidateSessionResponse);
+  rpc GetPresence(GetPresenceRequest) returns (GetPresenceResponse);
+}
+
+message IssueSessionRequest {
+  string user_id = 1;
+}
+
+message IssueSessionResponse {
+  string session_id = 1;
+}
+
+message ValidateSessionRequest {
+  string user_id = 1;
+  string session_id = 2;
+}
+
+message PlayerSnapshot {
+  string pilot_name = 1;
+  uint32 ship_id = 2;
+  uint32 faction_id = 3;
+  uint32 map_id = 4;
+  float x = 5;
+  float y = 6;
+  int64 credits = 7;
+  int64 uridium = 8;
+  int64 honor = 9;
+  int64 experience = 10;
+  bool banned = 11;
+}
+
+message ValidateSessionResponse {
+  bool valid = 1;
+  PlayerSnapshot player = 2;
+}
+
+message GetPresenceRequest {
+  repeated string user_ids = 1;
+}
+
+message Presence {
+  string user_id = 1;
+  bool online = 2;
+  uint32 map_id = 3;
+  string session_id = 4;
+}
+
+message GetPresenceResponse {
+  repeated Presence presences = 1;
+}

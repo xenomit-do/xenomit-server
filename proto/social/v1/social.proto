@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package xenomit.social.v1;
+
+option go_package = "github.com/xenomit/server/gen/proto/social/v1;socialv1";
+
+// SocialService handles clans, diplomacy, and player groups.
+service SocialService {
+  rpc CreateClan(CreateClanRequest) returns (CreateClanResponse);
+  rpc JoinClan(JoinClanRequest) returns (JoinClanResponse);
+  rpc LeaveClan(LeaveClanRequest) returns (LeaveClanResponse);
+  rpc SetDiplomacy(SetDiplomacyRequest) returns (SetDiplomacyResponse);
+  rpc InviteGroup(InviteGroupRequest) returns (InviteGroupResponse);
+  rpc AcceptGroup(AcceptGroupRequest) returns (AcceptGroupResponse);
+  rpc LeaveGroup(LeaveGroupRequest) returns (LeaveGroupResponse);
+  rpc PingGroup(PingGroupRequest) returns (PingGroupResponse);
+}
+
+enum DiplomacyStatus {
+  DIPLOMACY_STATUS_UNSPECIFIED = 0;
+  DIPLOMACY_STATUS_WAR = 1;
+  DIPLOMACY_STATUS_NAP = 2;
+  DIPLOMACY_STATUS_ALLIANCE = 3;
+}
+
+message CreateClanRequest {
+  string user_id = 1;
+  string name = 2;
+  string tag = 3;
+}
+
+message CreateClanResponse {
+  string clan_id = 1;
+}
+
+message JoinClanRequest {
+  string user_id = 1;
+  string clan_id = 2;
+}
+
+message JoinClanResponse {
+  bool ok = 1;
+}
+
+message LeaveClanRequest {
+  string user_id = 1;
+  string clan_id = 2;
+}
+
+message LeaveClanResponse {
+  bool ok = 1;
+}
+
+message SetDiplomacyRequest {
+  string clan_id = 1;
+  string target_clan_id = 2;
+  DiplomacyStatus status = 3;
+}
+
+message SetDiplomacyResponse {
+  bool ok = 1;
+}
+
+message InviteGroupRequest {
+  string leader_user_id = 1;
+  string invitee_user_id = 2;
+}
+
+message InviteGroupResponse {
+  string invite_id = 1;
+}
+
+message AcceptGroupRequest {
+  string user_id = 1;
+  string invite_id = 2;
+}
+
+message AcceptGroupResponse {
+  string group_id = 1;
+}
+
+message LeaveGroupRequest {
+  string user_id = 1;
+  string group_id = 2;
+}
+
+message LeaveGroupResponse {
+  bool ok = 1;
+}
+
+message PingGroupRequest {
+  string user_id = 1;
+  string group_id = 2;
+  uint32 map_id = 3;
+  float x = 4;
+  float y = 5;
+}
+
+message PingGroupResponse {
+  bool ok = 1;
+}
