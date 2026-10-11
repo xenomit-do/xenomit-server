@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: GAME_ADDR
+              value: {{ .Values.env.GAME_ADDR | quote }}
+            - name: CHAT_ADDR
+              value: {{ .Values.env.CHAT_ADDR | quote }}
+            - name: POLICY_ADDR
+              value: {{ .Values.env.POLICY_ADDR | quote }}
+            - name: HTTP_ADDR
+              value: {{ .Values.env.HTTP_ADDR | quote }}
+          ports:
+            - name: game
+              containerPort: {{ .Values.service.ports.game }}
+              protocol: TCP
+            - name: chat
+              containerPort: {{ .Values.service.ports.chat }}
+              protocol: TCP
+            - name: policy
+              containerPort: {{ .Values.service.ports.policy }}
+              protocol: TCP
+            - name: http
+              containerPort: {{ .Values.service.ports.http }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

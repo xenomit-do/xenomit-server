@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: xenomit
+  tag: local
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports:
+    game: 8080
+    chat: 9338
+    policy: 843
+    http: 8088
+
+env:
+  GAME_ADDR: ":8080"
+  CHAT_ADDR: ":9338"
+  POLICY_ADDR: ":843"
+  HTTP_ADDR: ":8088"
+
+resources: {}

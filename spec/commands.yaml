@@ -1,0 +1,53 @@
+# Declarative v10 catalog. cmd/protogen turns flat entries into Go.
+# Nested modules (ship create, assets) stay hand-written in pkg/protocol/v10.
+commands:
+  - name: LoginRequest
+    id: 10996
+    direction: in
+    fields:
+      - { name: instanceId, type: int, left: 8, right: 24 }
+      - { name: userId, type: int, left: 8, right: 24 }
+      - { name: factionId, type: short }
+      - { name: sessionId, type: utf }
+      - { name: version, type: utf }
+  - name: MoveRequest
+    id: 17063
+    direction: in
+    fields:
+      - { name: targetY, type: int, left: 8, right: 24 }
+      - { name: positionX, type: int, left: 15, right: 17 }
+      - { name: _pad, type: short }
+      - { name: targetX, type: int, left: 28, right: 4 }
+      - { name: positionY, type: int, left: 5, right: 27 }
+  - name: LegacyModule
+    id: 4224
+    direction: both
+    fields:
+      - { name: message, type: utf }
+  - name: MoveCommand
+    id: 29819
+    direction: out
+    fields:
+      - { name: marker, type: short, const: 6455 }
+      - { name: y, type: int, left: 19, right: 13 }
+      - { name: userId, type: int, left: 20, right: 12 }
+      - { name: x, type: int, left: 28, right: 4 }
+      - { name: timeToTarget, type: int, left: 19, right: 13 }
+  - name: ShipRemoveCommand
+    id: 19797
+    direction: out
+    fields:
+      - { name: userId, type: int, left: 2, right: 30 }
+      - { name: marker, type: short, const: -9955 }
+  - name: AttackLaserRequest
+    id: 31106
+    direction: in
+    fields: []
+  - name: AttackAbortLaserRequest
+    id: 1528
+    direction: in
+    fields: []
+  - name: PortalJumpRequest
+    id: 9253
+    direction: in
+    fields: []

@@ -1,0 +1,265 @@
+syntax = "proto3";
+
+package xenomit.admin.v1;
+
+option go_package = "github.com/xenomit/server/gen/proto/admin/v1;adminv1";
+
+// AdminService provides moderation and live-ops controls.
+service AdminService {
+  rpc Kick(KickRequest) returns (KickResponse);
+  rpc Ban(BanRequest) returns (BanResponse);
+  rpc Unban(UnbanRequest) returns (UnbanResponse);
+  rpc Broadcast(BroadcastRequest) returns (BroadcastResponse);
+  rpc StartEvent(StartEventRequest) returns (StartEventResponse);
+  rpc OnlineStats(OnlineStatsRequest) returns (OnlineStatsResponse);
+  rpc Give(GiveRequest) returns (GiveResponse);
+  rpc Spawn(SpawnRequest) returns (SpawnResponse);
+  rpc Despawn(DespawnRequest) returns (DespawnResponse);
+  rpc Clear(ClearRequest) returns (ClearResponse);
+  rpc Inspect(InspectRequest) returns (InspectResponse);
+  rpc Heal(HealRequest) returns (HealResponse);
+  rpc Kill(KillRequest) returns (KillResponse);
+  rpc Vitals(VitalsRequest) returns (VitalsResponse);
+  rpc Teleport(TeleportRequest) returns (TeleportResponse);
+  rpc Summon(SummonRequest) returns (SummonResponse);
+  rpc Peace(PeaceRequest) returns (PeaceResponse);
+  rpc Radiation(RadiationRequest) returns (RadiationResponse);
+}
+
+enum GameEvent {
+  GAME_EVENT_UNSPECIFIED = 0;
+  GAME_EVENT_JPB = 1;
+  GAME_EVENT_SPACEBALL = 2;
+  GAME_EVENT_UBA = 3;
+  GAME_EVENT_DUEL = 4;
+}
+
+message KickRequest {
+  string user_id = 1;
+  string reason = 2;
+  string admin_id = 3;
+}
+
+message KickResponse {
+  bool ok = 1;
+}
+
+message BanRequest {
+  string user_id = 1;
+  string reason = 2;
+  string admin_id = 3;
+  int64 duration_seconds = 4;
+  bool permanent = 5;
+}
+
+message BanResponse {
+  bool ok = 1;
+}
+
+message BroadcastRequest {
+  string message = 1;
+  string admin_id = 2;
+  uint32 map_id = 3;
+}
+
+message BroadcastResponse {
+  uint32 recipients = 1;
+}
+
+message StartEventRequest {
+  GameEvent name = 1;
+  string admin_id = 2;
+  map<string, string> params = 3;
+}
+
+message StartEventResponse {
+  string event_id = 1;
+}
+
+message OnlineStatsRequest {}
+
+message OnlineStatsResponse {
+  uint32 total_online = 1;
+  map<uint32, uint32> online_by_map = 2;
+  map<uint32, uint32> online_by_faction = 3;
+}
+
+message UnbanRequest {
+  string user_id = 1;
+  string admin_id = 2;
+}
+
+message UnbanResponse {
+  bool ok = 1;
+}
+
+message GiveRequest {
+  string user_id = 1;
+  string admin_id = 2;
+  int64 credits = 3;
+  int64 uridium = 4;
+  double honor = 5;
+  double experience = 6;
+  string item = 7;
+  optional bool premium = 8;
+  optional bool admin = 9;
+}
+
+message GiveResponse {
+  int64 credits = 1;
+  int64 uridium = 2;
+  bool online = 3;
+}
+
+message Loot {
+  int64 credits = 1;
+  int64 uridium = 2;
+  double honor = 3;
+  double experience = 4;
+  string item = 5;
+}
+
+message SpawnRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  string near_user_id = 3;
+  string kind = 4;
+  string name = 5;
+  int32 x = 6;
+  int32 y = 7;
+  uint32 count = 8;
+  uint32 ship_id = 9;
+  int32 hp = 10;
+  int32 shield = 11;
+  int32 speed = 12;
+  int32 damage = 13;
+  optional bool aggressive = 14;
+  int32 to_map = 15;
+  optional bool respawn = 16;
+  Loot loot = 17;
+}
+
+message SpawnResponse {
+  uint32 map_id = 1;
+  repeated int32 net_ids = 2;
+}
+
+message DespawnRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  int32 net_id = 3;
+}
+
+message DespawnResponse {
+  bool ok = 1;
+}
+
+message ClearRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  string kind = 3;
+}
+
+message ClearResponse {
+  uint32 removed = 1;
+}
+
+message InspectRequest {
+  uint32 map_id = 1;
+}
+
+message Entity {
+  int32 net_id = 1;
+  string kind = 2;
+  string name = 3;
+  int32 x = 4;
+  int32 y = 5;
+  int32 hp = 6;
+  Loot loot = 7;
+}
+
+message InspectResponse {
+  repeated Entity entities = 1;
+}
+
+message HealRequest {
+  string user_id = 1;
+  string admin_id = 2;
+}
+
+message HealResponse {
+  bool ok = 1;
+}
+
+message KillRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  int32 net_id = 3;
+  string user_id = 4;
+  string killer_user_id = 5;
+}
+
+message KillResponse {
+  bool ok = 1;
+}
+
+message VitalsRequest {
+  string user_id = 1;
+  string admin_id = 2;
+  optional uint32 ship_id = 3;
+  optional int32 hp = 4;
+  optional int32 max_hp = 5;
+  optional int32 shield = 6;
+  optional int32 max_shield = 7;
+  optional int32 damage = 8;
+  optional int32 speed = 9;
+  optional bool cloak = 10;
+}
+
+message VitalsResponse {
+  string status = 1;
+}
+
+message TeleportRequest {
+  string user_id = 1;
+  string admin_id = 2;
+  uint32 map_id = 3;
+  int32 x = 4;
+  int32 y = 5;
+}
+
+message TeleportResponse {
+  bool ok = 1;
+}
+
+message SummonRequest {
+  string user_id = 1;
+  string to_user_id = 2;
+  string admin_id = 3;
+}
+
+message SummonResponse {
+  bool ok = 1;
+}
+
+message PeaceRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  int32 seconds = 3;
+}
+
+message PeaceResponse {
+  bool ok = 1;
+}
+
+message RadiationRequest {
+  string admin_id = 1;
+  uint32 map_id = 2;
+  int32 x = 3;
+  int32 y = 4;
+  int32 radius = 5;
+}
+
+message RadiationResponse {
+  bool ok = 1;
+}

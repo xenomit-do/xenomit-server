@@ -1,0 +1,6 @@
+apiVersion: v2
+name: xenomit
+description: Minimal Helm chart for the xenomit game server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

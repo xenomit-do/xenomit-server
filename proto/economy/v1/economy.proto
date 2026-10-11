@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package xenomit.economy.v1;
+
+option go_package = "github.com/xenomit/server/gen/proto/economy/v1;economyv1";
+
+// EconomyService applies currency transactions and shop purchases.
+service EconomyService {
+  rpc ApplyTx(ApplyTxRequest) returns (ApplyTxResponse);
+  rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
+  rpc GetBalance(GetBalanceRequest) returns (GetBalanceResponse);
+}
+
+message ApplyTxRequest {
+  string idempotency_key = 1;
+  string user_id = 2;
+  int64 credits_delta = 3;
+  int64 uridium_delta = 4;
+  int64 honor_delta = 5;
+  int64 xp_delta = 6;
+  string reason = 7;
+}
+
+message ApplyTxResponse {
+  bool applied = 1;
+  int64 credits = 2;
+  int64 uridium = 3;
+  int64 honor = 4;
+  int64 experience = 5;
+}
+
+message BuyItemRequest {
+  string user_id = 1;
+  string item_id = 2;
+  uint32 quantity = 3;
+}
+
+message BuyItemResponse {
+  bool ok = 1;
+  int64 credits = 2;
+  int64 uridium = 3;
+}
+
+message GetBalanceRequest {
+  string user_id = 1;
+}
+
+message GetBalanceResponse {
+  int64 credits = 1;
+  int64 uridium = 2;
+  int64 honor = 3;
+  int64 experience = 4;
+}
